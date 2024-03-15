@@ -1,9 +1,5 @@
 from func import *
 
-gamestate = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-running = True
-winner = None
-
 print("Let's play tictactoe!")
 print("To play, type in a number based on the scoring guide below!")
 print_guide()
