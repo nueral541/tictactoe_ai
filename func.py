@@ -13,7 +13,6 @@ def print_board(gamestate):
     print(board[3] + ' | ' + board[4] + ' | ' + board[5])
     print("_________")
     print(board[6] + ' | ' + board[7] + ' | ' + board[8])
-    print("_________")
 
 def print_guide():
     print('1 | 2 | 3')
