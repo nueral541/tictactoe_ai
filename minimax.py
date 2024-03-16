@@ -1,8 +1,9 @@
 import math
 from func import winner, count_X, count_O
 
+
 def find_winning_combos(gamestate):
-    
+    count_X = count_O = 0
     # Check for 3 in a row horizontally, vertically, and diagonally
     # Horizontal
     for i in range(0, 9, 3):
@@ -76,14 +77,13 @@ def find_winning_combos(gamestate):
     return count_X, count_O
 
 def evaluate(gamestate):
+    count_X, count_O = find_winning_combos(gamestate)
     if winner == 'O':
-        eval = 100
+        return 100
     elif winner == 'X':
-        eval = -100
+        return -100
     else:
-        find_winning_combos(gamestate)
-
-        eval = ((count_X - count_O) * 100)
+        return (count_X - count_O) * 10
 
 def minimax(gamestate, depth, alpha, beta, maximizing_player):
     # Base case: if the maximum depth is reached
@@ -129,12 +129,15 @@ def find_best_move(gamestate, depth):
             alpha = max(alpha, eval)
     return best_move
 
-def make_move(board, move, is_x):
+def make_move(gamestate, move, is_x):
+    gamestate_copy = gamestate[:]
     move -= 1
-    board[move] = 1 if is_x else 0
+    gamestate_copy[move] = 1 if is_x else -1
+    return gamestate_copy
 
-def possible_moves(board):
+def possible_moves(gamestate):
     legal_moves = []
-    for i in board:
-        if board[i] == 0:
+    for i in range(len(gamestate)):
+        if gamestate[i] == 0:
             legal_moves.append(i + 1)
+    return legal_moves
