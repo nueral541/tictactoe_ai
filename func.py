@@ -27,15 +27,15 @@ def play_turn(player, gamestate):
     move_made = False  # Flag to track if a valid move has been made
     while not move_made:
         print_board(gamestate)
-        move = input(f"Play your turn, {player}. Type 'idk' to bring up the guide:")
-        if move == 'idk':
+        move_input = input(f"Play your turn, {player}. Type 'idk' to bring up the guide:")
+        if move_input == 'idk':
             print_guide()
             print("Here's the guide...")
         else:
             try:
-                move = int(move) - 1  # Convert move to int and adjust for 0-based indexing
-                if 0 <= move <= 8 and gamestate[move] == 0:  # Check if move is within bounds and the cell is empty
-                    gamestate[move] = 1 if player == 'X' else -1
+                move = int(move_input)  # Convert move input to int
+                if 1 <= move <= 9 and gamestate[move - 1] == 0:  # Check if move is within bounds and the cell is empty
+                    gamestate = make_move(gamestate, move, is_x=True)  # Update gamestate with player's move
                     move_made = True  # Valid move made, exit the loop
                 else:
                     print("That's not a valid move")
@@ -43,6 +43,14 @@ def play_turn(player, gamestate):
                 print("Please enter a number between 1 and 9, or type 'idk' for the guide.")
 
     return gamestate
+
+def make_move(gamestate, move, is_x):
+    if move is None:
+        return gamestate  # No move to make, return the original gamestate
+    gamestate_copy = gamestate[:]
+    move -= 1
+    gamestate_copy[move] = 1 if is_x else -1
+    return gamestate_copy
 
 def asess_turn(gamestate):
     # Check for 3 in a row horizontally, vertically, and diagonally

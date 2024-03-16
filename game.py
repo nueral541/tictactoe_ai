@@ -1,5 +1,5 @@
 from func import *
-from minimax import find_winning_combos, evaluate, find_best_move, make_move
+from minimax import find_best_move, make_move
 
 print("Let's play Tic Tac Toe!")
 print("To play, type in a number based on the scoring guide below!")

@@ -1,82 +1,35 @@
 import math
-from func import winner, count_X, count_O
+from func import winner, count_X, count_O, make_move
 
 def find_winning_combos(gamestate):
     count_X = count_O = 0
-    # Check for 3 in a row horizontally, vertically, and diagonally
-    # Horizontal
-    for i in range(0, 9, 3):
-        if gamestate[i] == gamestate[i+1] != 0 and gamestate[i+2] == 0:
-            if gamestate[i] == 1:
-                count_X += 1
-            else:
-                count_O += 1
-        elif gamestate[i] == gamestate[i+2] != 0 and gamestate[i+1] == 0:
-            if gamestate[i] == 1:
-                count_X += 1
-            else:
-                count_O += 1
-        elif gamestate[i+1] == gamestate[i+2] != 0 and gamestate[i] == 0:
-            if gamestate[i+1] == 1:
-                count_X += 1
-            else:
-                count_O += 1
 
-    # Vertical
-    for i in range(3):
-        if gamestate[i] == gamestate[i+3] != 0 and gamestate[i+6] == 0:
-            if gamestate[i] == 1:
-                count_X += 1
-            else:
-                count_O += 1
-        elif gamestate[i] == gamestate[i+6] != 0 and gamestate[i+3] == 0:
-            if gamestate[i] == 1:
-                count_X += 1
-            else:
-                count_O += 1
-        elif gamestate[i+3] == gamestate[i+6] != 0 and gamestate[i] == 0:
-            if gamestate[i+3] == 1:
-                count_X += 1
-            else:
-                count_O += 1
+    # Define winning combinations (indices of squares)
+    winning_combinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Horizontal
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Vertical
+        [0, 4, 8], [2, 4, 6]              # Diagonal
+    ]
 
-    # Diagonals
-    if gamestate[0] == gamestate[4] != 0 and gamestate[8] == 0:
-        if gamestate[0] == 1:
-            count_X += 1
-        else:
-            count_O += 1
-    elif gamestate[0] == gamestate[8] != 0 and gamestate[4] == 0:
-        if gamestate[0] == 1:
-            count_X += 1
-        else:
-            count_O += 1
-    elif gamestate[4] == gamestate[8] != 0 and gamestate[0] == 0:
-        if gamestate[4] == 1:
-            count_X += 1
-        else:
-            count_O += 1
+    for combo in winning_combinations:
+        symbol_count = {'X': 0, 'O': 0, 'empty': 0}
+        for index in combo:
+            if gamestate[index] == 1:
+                symbol_count['X'] += 1
+            elif gamestate[index] == -1:
+                symbol_count['O'] += 1
+            else:
+                symbol_count['empty'] += 1
 
-    if gamestate[2] == gamestate[4] != 0 and gamestate[6] == 0:
-        if gamestate[2] == 1:
+        if symbol_count['X'] == 2 and symbol_count['empty'] == 1:
             count_X += 1
-        else:
-            count_O += 1
-    elif gamestate[2] == gamestate[6] != 0 and gamestate[4] == 0:
-        if gamestate[2] == 1:
-            count_X += 1
-        else:
-            count_O += 1
-    elif gamestate[4] == gamestate[6] != 0 and gamestate[2] == 0:
-        if gamestate[4] == 1:
-            count_X += 1
-        else:
+        elif symbol_count['O'] == 2 and symbol_count['empty'] == 1:
             count_O += 1
 
     return count_X, count_O
 
 def evaluate(gamestate):
-    #count_X, count_O = find_winning_combos(gamestate)
+    count_X, count_O = find_winning_combos(gamestate)
     if winner == 'O':
         return 100
     elif winner == 'X':
@@ -130,14 +83,6 @@ def find_best_move(gamestate, depth):
             best_move = move
             alpha = max(alpha, eval)
     return best_move
-
-def make_move(gamestate, move, is_x):
-    if move is None:
-        return gamestate  # No move to make, return the original gamestate
-    gamestate_copy = gamestate[:]
-    move -= 1
-    gamestate_copy[move] = 1 if is_x else -1
-    return gamestate_copy
 
 def possible_moves(gamestate):
     legal_moves = []
