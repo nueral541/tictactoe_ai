@@ -82,7 +82,7 @@ def evaluate(gamestate):
     elif winner == 'X':
         return -100
     else:
-        return (count_X - count_O) * 10
+        return (count_X - (count_O * 2)) * 5
 
 def minimax(gamestate, depth, alpha, beta, maximizing_player):
     # Base case: if the maximum depth is reached
@@ -119,7 +119,10 @@ def find_best_move(gamestate, depth):
     alpha = -math.inf
     beta = math.inf
     max_eval = -math.inf
-    for move in possible_moves(gamestate):
+    legal_moves = possible_moves(gamestate)
+    if not legal_moves:
+        return best_move  # No legal moves available
+    for move in legal_moves:
         new_gamestate = make_move(gamestate, move, 1)  # Player 1 (X) makes the move
         eval = minimax(new_gamestate, depth - 1, alpha, beta, False)
         if eval > max_eval:
@@ -129,6 +132,8 @@ def find_best_move(gamestate, depth):
     return best_move
 
 def make_move(gamestate, move, is_x):
+    if move is None:
+        return gamestate  # No move to make, return the original gamestate
     gamestate_copy = gamestate[:]
     move -= 1
     gamestate_copy[move] = 1 if is_x else -1

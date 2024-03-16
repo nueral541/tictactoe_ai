@@ -18,11 +18,8 @@ while running:
         break  # Exit the loop if it's a tie
 
     # AI player O's turn
-    print("AI (O) is thinking...")
-    best_move = find_best_move(gamestate, depth=3)  # Adjust depth as needed
+    best_move = find_best_move(gamestate, depth=3)
     gamestate = make_move(gamestate, best_move, is_x=False)
-
-    print_board(gamestate)
 
     result = asess_turn(gamestate)
     if result != 0:
@@ -32,6 +29,7 @@ while running:
         break  # Exit the loop if it's a tie
 
 if winner:
+    print_board(gamestate)
     print("Congratulations!")
     print(f"{winner} wins!")
 else:
