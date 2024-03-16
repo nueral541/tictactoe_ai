@@ -76,13 +76,13 @@ def find_winning_combos(gamestate):
     return count_X, count_O
 
 def evaluate(gamestate):
-    count_X, count_O = find_winning_combos(gamestate)
+    #count_X, count_O = find_winning_combos(gamestate)
     if winner == 'O':
         return 100
     elif winner == 'X':
         return -100
     else:
-        return (count_X - (count_O * 2)) * 5
+        return (count_X - count_O) * 10
 
 def minimax(gamestate, depth, alpha, beta, maximizing_player):
     # Base case: if the maximum depth is reached
