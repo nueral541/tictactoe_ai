@@ -1,4 +1,5 @@
 from func import *
+from minimax import find_winning_combos, evaluate
 
 print("Let's play tictactoe!")
 print("To play, type in a number based on the scoring guide below!")

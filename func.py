@@ -2,6 +2,8 @@ gamestate = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 running = True
 winner = None
 eval = 0
+count_X = 0
+count_O = 0
 
 def print_board(gamestate):
     symbols = [' ', 'X', 'O']
@@ -19,35 +21,6 @@ def print_guide():
     print("4 | 5 | 6")
     print("_________")
     print("7 | 8 | 9")
-    
-def find_winning_combos(gamestate):
-        # Check for 3 in a row horizontally, vertically, and diagonally
-    # Horizontal
-    for i in range(0, 9, 3):
-        if gamestate[i] == gamestate[i+1] == gamestate[i+2] != 0:
-            return gamestate[i]
-
-    # Vertical
-    for i in range(3):
-        if gamestate[i] == gamestate[i+3] == gamestate[i+6] != 0:
-            return gamestate[i]
-
-    # Diagonals
-    if gamestate[0] == gamestate[4] == gamestate[8] != 0:
-        return gamestate[0]
-    if gamestate[2] == gamestate[4] == gamestate[6] != 0:
-        return gamestate[2]
-
-    # No winner yet
-    return 0
-
-def eval(gamestate):
-    if winner == 'O':
-        eval = 10000
-    elif winner == 'X':
-        eval = -10000
-    else:
-        find_winning_combos(gamestate)
 
 def play_turn(player, gamestate):
     global move
