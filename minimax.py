@@ -1,7 +1,6 @@
 import math
 from func import winner, count_X, count_O
 
-
 def find_winning_combos(gamestate):
     count_X = count_O = 0
     # Check for 3 in a row horizontally, vertically, and diagonally
