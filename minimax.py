@@ -1,5 +1,5 @@
 import math
-from func import winner, count_X, count_O, make_move
+from func import make_move
 
 def find_winning_combos(gamestate):
     count_X = count_O = 0
@@ -28,7 +28,7 @@ def find_winning_combos(gamestate):
 
     return count_X, count_O
 
-def evaluate(gamestate):
+def evaluate(gamestate, winner):
     count_X, count_O = find_winning_combos(gamestate)
     if winner == 'O':
         return 100
@@ -37,20 +37,17 @@ def evaluate(gamestate):
     else:
         return (count_X - count_O) * 10
 
-def minimax(gamestate, depth, alpha, beta, maximizing_player):
+def minimax(gamestate, depth, alpha, beta, maximizing_player, winner):
+    # Function body remains the same
     # Base case: if the maximum depth is reached
-    if depth == 0:
-        return evaluate(gamestate)
-    
-    # Check if the game is over
-    if winner != None:
-        return evaluate(gamestate)
+    if depth == 0 or winner(gamestate) is not None:
+        return evaluate(gamestate, winner)
     
     if maximizing_player:
         max_eval = -math.inf
         for move in possible_moves(gamestate):
             new_gamestate = make_move(gamestate, move, 1)  # Player 1 (X) makes the move
-            eval = minimax(new_gamestate, depth - 1, alpha, beta, False)
+            eval = minimax(new_gamestate, depth - 1, alpha, beta, False, winner)
             max_eval = max(max_eval, eval)
             alpha = max(alpha, eval)
             if beta <= alpha:
@@ -60,14 +57,14 @@ def minimax(gamestate, depth, alpha, beta, maximizing_player):
         min_eval = math.inf
         for move in possible_moves(gamestate):
             new_gamestate = make_move(gamestate, move, -1)  # Player -1 (O) makes the move
-            eval = minimax(new_gamestate, depth - 1, alpha, beta, True)
+            eval = minimax(new_gamestate, depth - 1, alpha, beta, True, winner)
             min_eval = min(min_eval, eval)
             beta = min(beta, eval)
             if beta <= alpha:
                 break
         return min_eval
 
-def find_best_move(gamestate, depth):
+def find_best_move(gamestate, depth, winner):
     best_move = None
     alpha = -math.inf
     beta = math.inf
@@ -77,7 +74,7 @@ def find_best_move(gamestate, depth):
         return best_move  # No legal moves available
     for move in legal_moves:
         new_gamestate = make_move(gamestate, move, 1)  # Player 1 (X) makes the move
-        eval = minimax(new_gamestate, depth - 1, alpha, beta, False)
+        eval = minimax(new_gamestate, depth - 1, alpha, beta, False, winner)
         if eval > max_eval:
             max_eval = eval
             best_move = move

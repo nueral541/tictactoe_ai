@@ -1,6 +1,5 @@
 gamestate = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 running = True
-winner = None
 eval = 0
 count_X = 0
 count_O = 0
@@ -51,7 +50,7 @@ def make_move(gamestate, move, is_x):
     gamestate_copy[move] = 1 if is_x else -1
     return gamestate_copy
 
-def asess_turn(gamestate):
+def assess_turn(gamestate):  # Renamed from 'asess_turn'
     # Check for 3 in a row horizontally, vertically, and diagonally
     # Horizontal
     for i in range(0, 9, 3):
