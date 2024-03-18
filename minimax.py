@@ -29,20 +29,24 @@ def minimax(gamestate, depth, is_maximizing):
     if is_maximizing:
         best_score = -float('inf')
         for move in legal_moves_list:
-            gamestate[move] = 1
-            score = minimax(gamestate, depth - 1, False)
-            gamestate[move] = 0  # Reset the move
-            best_score = max(best_score, score)
+            # Check if the move is legal
+            if gamestate[move] == 0:
+                gamestate[move] = 1
+                score = minimax(gamestate, depth - 1, False)
+                gamestate[move] = 0  # Reset the move
+                best_score = max(best_score, score)
         return best_score
 
     # If it's the minimizing player's turn (opponent)
     else:
         best_score = float('inf')
         for move in legal_moves_list:
-            gamestate[move] = -1
-            score = minimax(gamestate, depth - 1, True)
-            gamestate[move] = 0  # Reset the move
-            best_score = min(best_score, score)
+            # Check if the move is legal
+            if gamestate[move] == 0:
+                gamestate[move] = -1
+                score = minimax(gamestate, depth - 1, True)
+                gamestate[move] = 0  # Reset the move
+                best_score = min(best_score, score)
         return best_score
     
 def find_best_move(gamestate):

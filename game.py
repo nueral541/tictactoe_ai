@@ -22,10 +22,7 @@ while running:
 
     # AI Player O's turn
     best_move = find_best_move(gamestate)
-    if best_move != -1 and gamestate[best_move] == 0:
-        gamestate[best_move] = -1  # Place O's symbol at the best move position
-    else:
-        print("AI Player is f*cking stuupid")
+    gamestate[best_move] = -1  # Place O's symbol at the best move position
 
     # Check for winner or full board after O's turn
     result = asess_turn(gamestate)
