@@ -1,4 +1,5 @@
 from func import *
+from minimax import find_best_move
 
 gamestate = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 running = True
@@ -19,8 +20,14 @@ while running:
     elif 0 not in gamestate:  # Check if the board is full
         break  # Exit the loop if it's a tie
 
-    # Player O's turn
-    gamestate = play_turn('O', gamestate)
+    # AI Player O's turn
+    best_move = find_best_move(gamestate)
+    if best_move != -1 and gamestate[best_move] == 0:
+        gamestate[best_move] = -1  # Place O's symbol at the best move position
+    else:
+        print("AI Player is f*cking stuupid")
+
+    # Check for winner or full board after O's turn
     result = asess_turn(gamestate)
     if result != 0:
         winner = 'X' if result == 1 else 'O'
