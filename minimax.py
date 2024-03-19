@@ -51,15 +51,15 @@ def minimax(gamestate, depth, is_maximizing):
     
 def find_best_move(gamestate):
     best_move = -1
-    best_score = -float('inf')
+    best_score = float('-inf')  # Initialize the best score to negative infinity
 
     for i in range(9):
         if gamestate[i] == 0:
-            gamestate[i] = -1  # Assume AI player's move (maximizing player)
-            score = minimax(gamestate, depth=5, is_maximizing=False)  # Assuming opponent's turn
+            gamestate[i] = -1  # Assume AI player's move (minimizing player)
+            score = minimax(gamestate, depth=5, is_maximizing=False)  # Evaluate the minimax score
             gamestate[i] = 0  # Reset the move
             if score > best_score:
                 best_score = score
-                best_move = i + 1  # Convert index to position (1-9)
-    
+                best_move = i  # Store the index of the best move
+
     return best_move
