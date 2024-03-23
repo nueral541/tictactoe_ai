@@ -34,7 +34,6 @@ def play_turn(player, gamestate):
                     print("That's not a valid move")
             except ValueError:  # Catch ValueError if int conversion fails
                 print("Please enter a number between 1 and 9, or type 'idk' for the guide.")
-
     return gamestate
 
 def asess_turn(gamestate):
