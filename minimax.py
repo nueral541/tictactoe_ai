@@ -1,65 +1,79 @@
 from func import *
 
-def evaluate(gamestate):
-    win = asess_turn(gamestate)
-    if win == 1:
-        return 10
-    elif win == -1:
-        return -10
-    else:
-        return 0
+def terminal(gamestate):
+    for i in range(0, 9, 3):
+        if gamestate[i] == gamestate[i+1] == gamestate[i+2] != 0:
+            return True
+
+    # Vertical
+    for i in range(3):
+        if gamestate[i] == gamestate[i+3] == gamestate[i+6] != 0:
+            return True
+
+    # Diagonals
+    if gamestate[0] == gamestate[4] == gamestate[8] != 0:
+        return True
+    if gamestate[2] == gamestate[4] == gamestate[6] != 0:
+        return True
     
-def legal_moves(gamestate):
-    """
-    Returns a list of indices representing legal moves in the current gamestate.
-    """
-    return [i for i, cell in enumerate(gamestate) if cell == 0]
-
-def minimax(gamestate, depth, is_maximizing):
-    score = evaluate(gamestate)
-
-    # Base case: if the game is over or reached maximum depth
-    if abs(score) == 10 or depth == 0:
-        return score
-
-    # Get legal moves
-    legal_moves_list = legal_moves(gamestate)
-
-    # If it's the maximizing player's turn (AI)
-    if is_maximizing:
-        best_score = -float('inf')
-        for move in legal_moves_list:
-            # Check if the move is legal
-            if gamestate[move] == 0:
-                gamestate[move] = 1
-                score = minimax(gamestate, depth - 1, False)
-                gamestate[move] = 0  # Reset the move
-                best_score = max(best_score, score)
-        return best_score
-
-    # If it's the minimizing player's turn (opponent)
+    if 0 in gamestate:
+        return False
     else:
-        best_score = float('inf')
-        for move in legal_moves_list:
-            # Check if the move is legal
-            if gamestate[move] == 0:
-                gamestate[move] = -1
-                score = minimax(gamestate, depth - 1, True)
-                gamestate[move] = 0  # Reset the move
-                best_score = min(best_score, score)
-        return best_score
-    
-def find_best_move(gamestate):
-    best_move = -1
-    best_score = float('-inf')  # Initialize the best score to negative infinity
+        return True
 
-    for i in range(9):
+def value(gamestate):
+    for i in range(0, 9, 3):
+        if gamestate[i] == gamestate[i+1] == gamestate[i+2] != 0:
+            return -gamestate[i]
+
+    # Vertical
+    for i in range(3):
+        if gamestate[i] == gamestate[i+3] == gamestate[i+6] != 0:
+            return -gamestate[i]
+
+    # Diagonals
+    if gamestate[0] == gamestate[4] == gamestate[8] != 0:
+            return -gamestate[0]
+    if gamestate[2] == gamestate[4] == gamestate[6] != 0:
+            return -gamestate[2]
+    
+    if 0 in gamestate:
+        return None
+    else:
+        return 0  # No winners and no empty cells left, so the game is a tie
+
+def player(gamestate):
+    X_Count = 0
+    O_Count = 0
+    for move in gamestate:
+        if move == 1:
+            X_Count += 1
+        elif move == -1:
+            O_Count += 1
+
+    if X_Count == O_Count:
+        return 'MIN'
+    elif X_Count - O_Count == 1:
+        return 'MAX'
+    else:
+        return 'NIL'
+
+def actions(gamestate):
+    actions = []
+    for i in range(len(gamestate)):
         if gamestate[i] == 0:
-            gamestate[i] = -1  # Assume AI player's move (minimizing player)
-            score = minimax(gamestate, depth=5, is_maximizing=False)  # Evaluate the minimax score
-            gamestate[i] = 0  # Reset the move
-            if score > best_score:
-                best_score = score
-                best_move = i  # Store the index of the best move
+            actions.append(i)
+    
+    return actions
 
-    return best_move
+def result(gamestate, action, turn):
+    new_state = gamestate.copy()  # Create a copy of the gamestate
+    new_state[action] = 1 if turn == 'MIN' else -1 if turn == 'MAX' else 0
+    return new_state
+    
+gamestate = [1, -1, 0, 1, 0, -1, 1, 0, 0]
+
+acts = actions(gamestate)
+
+for i in acts:
+    print(result(gamestate, i, player(gamestate)))
