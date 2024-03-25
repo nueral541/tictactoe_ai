@@ -90,45 +90,14 @@ def minimax(gamestate):
             value = min(value, minimax(result(gamestate, a, 'MIN')))
         return value
     
-def print_board(gamestate):
-    for i in range(0, 9, 3):
-        print(gamestate[i:i+3])
-
-def main():
-    gamestate = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+def find_best_move(gamestate):
+    best_move = None
+    best_value = float('-inf')
     
-    while not terminal(gamestate):
-        print("Current board:")
-        print_board(gamestate)
-        player_move = int(input("Enter your move (0-8): "))
-        if gamestate[player_move] == 0:
-            gamestate[player_move] = 1  # Assuming player is 'X'
-        else:
-            print("Invalid move, try again.")
-            continue
-        
-        if terminal(gamestate):
-            break
-        
-        # AI move
-        print("AI's move:")
-        best_move = None
-        best_value = float('-inf')
-        for action in actions(gamestate):
-            value = minimax(result(gamestate, action, 'MAX'))
-            if value > best_value:
-                best_value = value
-                best_move = action
-        gamestate[best_move] = -1  # Assuming AI is 'O'
+    for action in actions(gamestate):
+        value = minimax(result(gamestate, action, player(gamestate)))
+        if value > best_value:
+            best_value = value
+            best_move = action
     
-    print("Final board:")
-    print_board(gamestate)
-    if values(gamestate) == -1:
-        print("You win!")
-    elif values(gamestate) == 1:
-        print("AI wins!")
-    else:
-        print("It's a tie!")
-
-if __name__ == "__main__":
-    main()
+    return best_move

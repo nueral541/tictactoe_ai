@@ -1,5 +1,5 @@
 from func import *
-from minimax import minimax
+from minimax import find_best_move
 
 gamestate = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 running = True
@@ -20,10 +20,22 @@ while running:
     elif 0 not in gamestate:  # Check if the board is full
         break  # Exit the loop if it's a tie
 
+    gamestate[find_best_move(gamestate)] = -1
+    print_board(gamestate)
+    result = asess_turn(gamestate)
+    if result != 0:
+        winner = 'X' if result == 1 else 'O'
+        break  # Exit the loop if there's a winner
+    elif 0 not in gamestate:  # Check if the board is full
+        break  # Exit the loop if it's a tie
+
 
 print_board(gamestate)
 if winner:
     print("Congratulations!")
-    print(f"{winner} wins!")
+    if winner == -1:
+        ("The AI wins! (O)")
+    else:
+        ("Human wins! (X)")
 else:
     print("It's a tie!")
