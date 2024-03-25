@@ -21,7 +21,6 @@ while running:
         break  # Exit the loop if it's a tie
 
     gamestate[find_best_move(gamestate)] = -1
-    print_board(gamestate)
     result = asess_turn(gamestate)
     if result != 0:
         winner = 'X' if result == 1 else 'O'
